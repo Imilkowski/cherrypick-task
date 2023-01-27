@@ -117,6 +117,9 @@ public class GridManager : MonoBehaviour
     //deletes previous spawner position in array and adds in new place
     public void MoveSpawnerIndex(Vector2Int newIndex)
     {
+        Debug.Log(newIndex);
+        Debug.Log(newIndex.y + ", " + newIndex.x);
+
         gridElementsArray[spawnerIndexPos.y, spawnerIndexPos.x].type = ElementType.Empty;
         gridElementsArray[newIndex.y, newIndex.x].type = ElementType.Spawner;
         spawnerIndexPos = newIndex;
@@ -134,6 +137,7 @@ public class GridManager : MonoBehaviour
     //check where is the nearest empty place
     private Vector2Int CheckNearestEmpty(Vector2Int centerLocation)
     {
+        //TODO: what if there is no room left for any item?
         return Vector2Int.zero;
     }
 

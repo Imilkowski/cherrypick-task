@@ -19,7 +19,7 @@ public class DragAndDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, ID
             rectTransform.localPosition = GridManager.Instance.startPos + fixedPos;
         }
 
-        return new Vector2Int(-(int)(fixedPos.y / 32), (int)(fixedPos.x / 32));
+        return new Vector2Int((int)(fixedPos.x / 32), -(int)(fixedPos.y / 32));
     }
 
     void Awake()
