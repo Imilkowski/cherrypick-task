@@ -22,6 +22,6 @@ public class Spawner : MonoBehaviour
             randomItemType = GridManager.ElementType.ItemBlue;
         }
 
-        GridManager.Instance.SpawnAnItem(new Vector2Int(0, 0), randomItemType);
+        GridManager.Instance.SpawnAnItem(randomItemType, transform.position);
     }
 }

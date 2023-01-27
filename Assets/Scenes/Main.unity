@@ -1676,6 +1676,7 @@ GameObject:
   - component: {fileID: 2145103152}
   - component: {fileID: 2145103151}
   - component: {fileID: 2145103150}
+  - component: {fileID: 2145103153}
   m_Layer: 5
   m_Name: Spawn Button
   m_TagString: Untagged
@@ -1747,19 +1748,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2145103151}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 8048111656265975933}
-        m_TargetAssemblyTypeName: Spawner, Assembly-CSharp
-        m_MethodName: SpawnAnItem
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &2145103151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1798,6 +1787,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2145103148}
   m_CullTransparentMesh: 1
+--- !u!114 &2145103153
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2145103148}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6c32fa1e17ab6a45883e233d063572e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnerComponent: {fileID: 8048111656265975933}
 --- !u!1 &8048111656265975926
 GameObject:
   m_ObjectHideFlags: 0

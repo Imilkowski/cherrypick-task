@@ -8,6 +8,7 @@ public class GridManager : MonoBehaviour
 
     public Vector2Int gridSize { get; private set; }
     public Vector3 startPos { get; private set; }
+    public Vector2Int spawnerIndexPos;
 
     public enum ElementType
     {
@@ -113,10 +114,39 @@ public class GridManager : MonoBehaviour
         gridDrawerComponent.DrawWalls();
     }
 
-    //sets an item to selected index in array
-    public void SpawnAnItem(Vector2Int itemIndex, ElementType itemType)
+    //deletes previous spawner position in array and adds in new place
+    public void MoveSpawnerIndex(Vector2Int newIndex)
     {
-        GameObject newItem = gridDrawerComponent.DrawItem(itemIndex, itemType);
+        gridElementsArray[spawnerIndexPos.y, spawnerIndexPos.x].type = ElementType.Empty;
+        gridElementsArray[newIndex.y, newIndex.x].type = ElementType.Spawner;
+        spawnerIndexPos = newIndex;
+    }
+
+    //converts world space to index in array
+    private Vector2Int GetIndexPos(Vector3 worldPos)
+    {
+        Vector3 relativePos = worldPos - GridManager.Instance.startPos;
+        Vector3 fixedPos = new Vector3(Mathf.Round(relativePos.x / 32) * 32, Mathf.Round(relativePos.y / 32) * 32, 0);
+
+        return new Vector2Int(-(int)(fixedPos.y / 32), (int)(fixedPos.x / 32));
+    }
+
+    //check where is the nearest empty place
+    private Vector2Int CheckNearestEmpty(Vector2Int centerLocation)
+    {
+        return Vector2Int.zero;
+    }
+
+    //sets an item to selected index in array
+    public void SpawnAnItem(ElementType itemType, Vector3 spawnerPos)
+    {
+        SpawnAnItemAtPos(CheckNearestEmpty(GetIndexPos(spawnerPos)), itemType, spawnerPos);
+    }
+
+    //sets an item to selected index in array
+    public void SpawnAnItemAtPos(Vector2Int itemIndex, ElementType itemType, Vector3 spawnerPos)
+    {
+        GameObject newItem = gridDrawerComponent.DrawItem(itemIndex, itemType, spawnerPos);
         gridElementsArray[itemIndex.y, itemIndex.x].type = itemType;
         gridElementsArray[itemIndex.y, itemIndex.x].heldElement = newItem;
     }

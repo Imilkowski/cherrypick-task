@@ -41,11 +41,13 @@ public class GridDrawer : MonoBehaviour
     }
 
     //spawns an item
-    public GameObject DrawItem(Vector2Int itemIndex, GridManager.ElementType itemType)
+    public GameObject DrawItem(Vector2Int itemIndex, GridManager.ElementType itemType, Vector3 startPos)
     {
         Transform itemTransform = Instantiate(_itemPrefab, Vector3.zero, Quaternion.identity, _itemsParent).transform;
         Vector3 pos = new Vector3(itemIndex.x, -itemIndex.y, 0) * GridManager.ELEMENT_SIZE;
-        itemTransform.localPosition = GridManager.Instance.startPos + pos;
+        Vector3 targetPos = GridManager.Instance.startPos + pos;
+
+        itemTransform.position = startPos;
 
         Image itemImage = itemTransform.GetComponent<Image>();
         switch (itemType)
@@ -65,6 +67,9 @@ public class GridDrawer : MonoBehaviour
             default:
                 break;
         }
+
+        //TODO: change to not use LeanTween
+        LeanTween.moveLocal(itemTransform.gameObject, targetPos, 0.5f);
 
         return itemTransform.gameObject;
     }
