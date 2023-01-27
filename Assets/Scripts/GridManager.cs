@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GridManager : MonoBehaviour
 {
-    public const int ELEMENT_SIZE = 32;
+    public static int ELEMENT_SIZE = 32;
 
     public Vector2Int gridSize { get; private set; }
     public Vector3 startPos { get; private set; }
@@ -13,7 +13,10 @@ public class GridManager : MonoBehaviour
     {
         Empty,
         Wall,
-        Item
+        Spawner,
+        ItemGreen,
+        ItemRed,
+        ItemBlue
     }
 
     public class GridElement
@@ -33,7 +36,7 @@ public class GridManager : MonoBehaviour
     [Header("Assignables")]
     [SerializeField] private GridDrawer gridDrawerComponent;
 
-    private GridElement[,] gridElementsArray;
+    public GridElement[,] gridElementsArray;
 
     void Awake()
     {
@@ -66,7 +69,8 @@ public class GridManager : MonoBehaviour
 
         SetUpWalls();
     }
-
+    
+    //calculates top-left (0, 0 in the array) position in world space
     private Vector3 CalculateStartPos()
     {
         Vector3 pos = new Vector3();
@@ -107,5 +111,13 @@ public class GridManager : MonoBehaviour
         }
 
         gridDrawerComponent.DrawWalls();
+    }
+
+    //sets an item to selected index in array
+    public void SpawnAnItem(Vector2Int itemIndex, ElementType itemType)
+    {
+        GameObject newItem = gridDrawerComponent.DrawItem(itemIndex, itemType);
+        gridElementsArray[itemIndex.y, itemIndex.x].type = itemType;
+        gridElementsArray[itemIndex.y, itemIndex.x].heldElement = newItem;
     }
 }

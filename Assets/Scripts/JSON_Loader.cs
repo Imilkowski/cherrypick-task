@@ -17,7 +17,7 @@ public class JSON_Loader : MonoBehaviour
         }
     }
 
-    void Start()
+    void Awake()
     {
         Size gridSize = ReadGridData(Path.Combine(Application.streamingAssetsPath, _fileName));
 
