@@ -47,7 +47,7 @@ public class GridDrawer : MonoBehaviour
         Vector3 pos = new Vector3(itemIndex.x, -itemIndex.y, 0) * GridManager.ELEMENT_SIZE;
         Vector3 targetPos = GridManager.Instance.startPos + pos;
 
-        itemTransform.position = startPos;
+        itemTransform.localPosition = startPos;
 
         Image itemImage = itemTransform.GetComponent<Image>();
         switch (itemType)

@@ -10,6 +10,8 @@ public class GridManager : MonoBehaviour
     public Vector3 startPos { get; private set; }
     public Vector2Int spawnerIndexPos;
 
+    private Ring ring = new Ring();
+
     public enum ElementType
     {
         Empty,
@@ -18,6 +20,57 @@ public class GridManager : MonoBehaviour
         ItemGreen,
         ItemRed,
         ItemBlue
+    }
+
+    private class Ring
+    {
+        public int level;
+        public Vector2Int posFromCenter;
+
+        public void Reset()
+        {
+            level = 1;
+            posFromCenter = new Vector2Int(0, -1);
+        }
+
+        public void RaiseLevel()
+        {
+            level += 1;
+            posFromCenter = new Vector2Int(0, -level);
+        }
+
+        public void NextPos()
+        {
+            if(posFromCenter.y == -level && posFromCenter.x == -1)
+            {
+                RaiseLevel();
+                return;
+            }
+
+            if (posFromCenter.y == -level && posFromCenter.x != level)
+            {
+                posFromCenter += new Vector2Int(1, 0);
+                return;
+            }
+
+            if (posFromCenter.x == level && posFromCenter.y != level)
+            {
+                posFromCenter += new Vector2Int(0, 1);
+                return;
+            }
+
+            if (posFromCenter.y == level && posFromCenter.x != -level)
+            {
+                posFromCenter += new Vector2Int(-1, 0);
+                return;
+            }
+
+            if (posFromCenter.x == -level && posFromCenter.y != -level)
+            {
+                posFromCenter += new Vector2Int(0, -1);
+                return;
+            }
+        }
     }
 
     public class GridElement
@@ -120,6 +173,8 @@ public class GridManager : MonoBehaviour
         gridElementsArray[spawnerIndexPos.y, spawnerIndexPos.x].type = ElementType.Empty;
         gridElementsArray[newIndex.y, newIndex.x].type = ElementType.Spawner;
         spawnerIndexPos = newIndex;
+
+        ring.Reset();
     }
 
     //converts world space to index in array
@@ -128,20 +183,59 @@ public class GridManager : MonoBehaviour
         Vector3 relativePos = worldPos - GridManager.Instance.startPos;
         Vector3 fixedPos = new Vector3(Mathf.Round(relativePos.x / 32) * 32, Mathf.Round(relativePos.y / 32) * 32, 0);
 
-        return new Vector2Int(-(int)(fixedPos.y / 32), (int)(fixedPos.x / 32));
+        return new Vector2Int((int)(fixedPos.x / 32), -(int)(fixedPos.y / 32));
+    }
+
+    //returns value of the element on given index position
+    private ElementType ReadElement(Vector2Int indexPos)
+    {
+        return gridElementsArray[indexPos.y, indexPos.x].type;
+    }
+
+    //checks if the index position is inbounds
+    private bool IsInbounds(Vector2Int indexPos)
+    {
+        if(indexPos.y >= 0 && indexPos.y < gridSize.y && indexPos.x >= 0 && indexPos.x < gridSize.x)
+        {
+            return true;
+        }
+
+        return false;
     }
 
     //check where is the nearest empty place
-    private Vector2Int CheckNearestEmpty(Vector2Int centerLocation)
+    private Vector2Int GetNearestEmpty(Vector2Int centerLocation)
     {
+        Vector2Int locationToCheck = centerLocation + ring.posFromCenter;
+
+        if (IsInbounds(locationToCheck))
+        {
+            if (ReadElement(locationToCheck) == ElementType.Empty)
+            {
+                return locationToCheck;
+            }
+            else
+            {
+                //check next one
+                ring.NextPos();
+                return GetNearestEmpty(centerLocation);
+            }
+        }
+        else
+        {
+            //check next one
+            ring.NextPos();
+            return GetNearestEmpty(centerLocation);
+        }
+
         //TODO: what if there is no room left for any item?
-        return Vector2Int.zero;
     }
 
     //sets an item to selected index in array
     public void SpawnAnItem(ElementType itemType, Vector3 spawnerPos)
     {
-        SpawnAnItemAtPos(CheckNearestEmpty(GetIndexPos(spawnerPos)), itemType, spawnerPos);
+        Vector2Int location = GetNearestEmpty(GetIndexPos(spawnerPos));
+        SpawnAnItemAtPos(location, itemType, spawnerPos);
     }
 
     //sets an item to selected index in array
