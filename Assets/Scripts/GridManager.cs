@@ -76,6 +76,7 @@ public class GridManager : MonoBehaviour
     {
         Vector3 pos = new Vector3();
 
+        //TODO: handle odd numbers
         if(gridSize.x % 2 == 0)
         {
             pos.x = (gridSize.x / 2) * ELEMENT_SIZE - (int)(ELEMENT_SIZE * 0.5f);
@@ -93,6 +94,8 @@ public class GridManager : MonoBehaviour
         {
             pos.y = -(int)Mathf.Floor(gridSize.y / 2) * ELEMENT_SIZE;
         }
+
+        Debug.Log(startPos);
 
         return pos;
     }
@@ -117,9 +120,6 @@ public class GridManager : MonoBehaviour
     //deletes previous spawner position in array and adds in new place
     public void MoveSpawnerIndex(Vector2Int newIndex)
     {
-        Debug.Log(newIndex);
-        Debug.Log(newIndex.y + ", " + newIndex.x);
-
         gridElementsArray[spawnerIndexPos.y, spawnerIndexPos.x].type = ElementType.Empty;
         gridElementsArray[newIndex.y, newIndex.x].type = ElementType.Spawner;
         spawnerIndexPos = newIndex;
