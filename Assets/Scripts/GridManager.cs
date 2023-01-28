@@ -76,7 +76,6 @@ public class GridManager : MonoBehaviour
     {
         Vector3 pos = new Vector3();
 
-        //TODO: handle odd numbers
         if(gridSize.x % 2 == 0)
         {
             pos.x = (gridSize.x / 2) * ELEMENT_SIZE - (int)(ELEMENT_SIZE * 0.5f);
@@ -92,10 +91,8 @@ public class GridManager : MonoBehaviour
         }
         else
         {
-            pos.y = -(int)Mathf.Floor(gridSize.y / 2) * ELEMENT_SIZE;
+            pos.y = (int)Mathf.Floor(gridSize.y / 2) * ELEMENT_SIZE;
         }
-
-        Debug.Log(startPos);
 
         return pos;
     }
