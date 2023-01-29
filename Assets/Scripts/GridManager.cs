@@ -86,9 +86,13 @@ public class GridManager : MonoBehaviour
 
         public void Clear()
         {
-            //TODO: could use object pooling
             type = ElementType.Empty;
-            Destroy(heldElement);
+
+            //TODO: could use object pooling
+            if (heldElement != null)
+            {
+                Destroy(heldElement);
+            }
         }
     }
 
@@ -185,7 +189,7 @@ public class GridManager : MonoBehaviour
     }
 
     //converts world space to index in array
-    private Vector2Int GetIndexPos(Vector3 worldPos)
+    public Vector2Int GetIndexPos(Vector3 worldPos)
     {
         Vector3 relativePos = worldPos - GridManager.Instance.startPos;
         Vector3 fixedPos = new Vector3(Mathf.Round(relativePos.x / 32) * 32, Mathf.Round(relativePos.y / 32) * 32, 0);
@@ -258,7 +262,7 @@ public class GridManager : MonoBehaviour
         }
         catch
         {
-            Debug.Log("No more empty space");
+            //
         }
     }
 
@@ -273,6 +277,7 @@ public class GridManager : MonoBehaviour
     private void ClearItem(Vector2Int itemIndex)
     {
         gridElementsArray[itemIndex.y, itemIndex.x].Clear();
+        gridDrawerComponent.ClearTile(itemIndex);
     }
 
     //checks an item and clear if needed

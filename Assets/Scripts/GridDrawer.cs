@@ -20,9 +20,14 @@ public class GridDrawer : MonoBehaviour
     [SerializeField] private List<Sprite> _itemSpritesList;
 
     [SerializeField] private TileBase _wallTile;
+    [SerializeField] private TileBase _itemRedTile;
+    [SerializeField] private TileBase _itemGreenTile;
+    [SerializeField] private TileBase _itemBlueTile;
 
     void Awake()
     {
+        LeanTween.init(10000);
+
         _tileMap = _tileMapGrid.transform.GetChild(0).GetComponent<Tilemap>();
     }
 
@@ -49,6 +54,11 @@ public class GridDrawer : MonoBehaviour
         }
     }
 
+    public void ClearTile(Vector2Int indexPos)
+    {
+        _tileMap.SetTile(new Vector3Int(indexPos.x, -indexPos.y, 0), null);
+    }
+
     //spawns an item
     public GameObject DrawItem(Vector2Int itemIndex, GridManager.ElementType itemType, Vector3 startPos)
     {
@@ -60,18 +70,22 @@ public class GridDrawer : MonoBehaviour
         itemTransform.localPosition = startPos;
 
         Image itemImage = itemTransform.GetComponent<Image>();
+        TileBase tileType = null;
         switch (itemType)
         {
             case GridManager.ElementType.ItemGreen:
                 itemImage.sprite = _itemSpritesList[1];
+                tileType = _itemGreenTile;
                 break;
 
             case GridManager.ElementType.ItemRed:
                 itemImage.sprite = _itemSpritesList[0];
+                tileType = _itemRedTile;
                 break;
 
             case GridManager.ElementType.ItemBlue:
                 itemImage.sprite = _itemSpritesList[2];
+                tileType = _itemBlueTile;
                 break;
 
             default:
@@ -80,7 +94,16 @@ public class GridDrawer : MonoBehaviour
 
         //TODO: change to not use LeanTween
         float distance = Vector3.Distance(startPos, targetPos);
-        LeanTween.moveLocal(itemTransform.gameObject, targetPos, distance / 500);
+        LeanTween.moveLocal(itemTransform.gameObject, targetPos, distance / 500).setOnComplete(ConvertToTile);
+
+        void ConvertToTile()
+        {
+            Vector2Int indexPos = GridManager.Instance.GetIndexPos(targetPos);
+            //TODO: could use object pooling
+            Destroy(GridManager.Instance.gridElementsArray[indexPos.y, indexPos.x].heldElement.gameObject);
+
+            _tileMap.SetTile(new Vector3Int(indexPos.x, -indexPos.y, 0), tileType);
+        }
 
         return itemTransform.gameObject;
     }

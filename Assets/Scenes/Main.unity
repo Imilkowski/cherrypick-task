@@ -1438,8 +1438,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 999 fps
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9f64dd37781c3d34f9e32139facff3b0, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 9f64dd37781c3d34f9e32139facff3b0, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1808,16 +1808,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _boardBackground: {fileID: 207288467}
-  _wallsParent: {fileID: 2076716442}
   _itemsParent: {fileID: 1985075897}
-  _tileMap: {fileID: 0}
-  _wallPrefab: {fileID: 4052158745655879643, guid: ae9238f3cbe015f40b7612362457326b, type: 3}
+  _tileMapGrid: {fileID: 1888272078}
   _itemPrefab: {fileID: 4052158745655879643, guid: d78d5288c01cafb478d71bda769c73d3, type: 3}
   _itemSpritesList:
   - {fileID: 21300000, guid: c6a6a4c446e16df4891ed08d7952f464, type: 3}
   - {fileID: 21300000, guid: 046abb6eade6c084c87b41385321cbee, type: 3}
   - {fileID: 21300000, guid: 7ae61f35a56aca7478ab65281e1c719d, type: 3}
-  _wallTile: {fileID: 0}
+  _wallTile: {fileID: 11400000, guid: c29d8fbc4c0f16e4a823b51c047cb8be, type: 2}
+  _itemRedTile: {fileID: 11400000, guid: 59523acee45463140994a14447c6fa70, type: 2}
+  _itemGreenTile: {fileID: 11400000, guid: f9ac95c7117dc2a41b01c877d5c32596, type: 2}
+  _itemBlueTile: {fileID: 11400000, guid: 2128e671afcb1c34d94126636a60c711, type: 2}
 --- !u!1 &1410297458
 GameObject:
   m_ObjectHideFlags: 0
