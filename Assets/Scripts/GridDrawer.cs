@@ -2,20 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Tilemaps;
 
 public class GridDrawer : MonoBehaviour
 {
     [Header("Assignables")]
     [SerializeField] private RectTransform _boardBackground;
-    [SerializeField] private RectTransform _wallsParent;
     [SerializeField] private RectTransform _itemsParent;
 
+    [SerializeField] private Grid _tileMapGrid;
+    private Tilemap _tileMap;
+
     [Header("Prefabs")]
-    [SerializeField] private GameObject _wallPrefab;
     [SerializeField] private GameObject _itemPrefab;
 
     [Header("Item Sprites")]
     [SerializeField] private List<Sprite> _itemSpritesList;
+
+    [SerializeField] private TileBase _wallTile;
+
+    void Awake()
+    {
+        _tileMap = _tileMapGrid.transform.GetChild(0).GetComponent<Tilemap>();
+    }
 
     //sets overall visual size of the board
     public void SetBackgroundSize(Vector2Int newSize)
@@ -26,16 +35,15 @@ public class GridDrawer : MonoBehaviour
     //spawns all the walls
     public void DrawWalls()
     {
-        //TODO: draw walls in more optimized manner
+        _tileMapGrid.transform.localPosition = GridManager.Instance.startPos - new Vector3(16, 16, 0);
+
         for (int i = 0; i < GridManager.Instance.gridSize.y; i++)
         {
             for (int j = 0; j < GridManager.Instance.gridSize.x; j++)
             {
-                if(GridManager.Instance.gridElementsArray[i, j].type == GridManager.ElementType.Wall)
+                if (GridManager.Instance.gridElementsArray[i, j].type == GridManager.ElementType.Wall)
                 {
-                    Transform wallTransform = Instantiate(_wallPrefab, Vector3.zero, Quaternion.identity, _wallsParent).transform;
-                    Vector3 pos = new Vector3(j, -i, 0) * GridManager.ELEMENT_SIZE;
-                    wallTransform.localPosition = GridManager.Instance.startPos + pos;
+                    _tileMap.SetTile((new Vector3Int(j, -i, 0)), _wallTile);
                 }
             }
         }
@@ -44,7 +52,7 @@ public class GridDrawer : MonoBehaviour
     //spawns an item
     public GameObject DrawItem(Vector2Int itemIndex, GridManager.ElementType itemType, Vector3 startPos)
     {
-        //TODO: object pooling
+        //TODO: could use object pooling
         Transform itemTransform = Instantiate(_itemPrefab, Vector3.zero, Quaternion.identity, _itemsParent).transform;
         Vector3 pos = new Vector3(itemIndex.x, -itemIndex.y, 0) * GridManager.ELEMENT_SIZE;
         Vector3 targetPos = GridManager.Instance.startPos + pos;

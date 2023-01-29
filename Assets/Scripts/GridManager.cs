@@ -86,7 +86,7 @@ public class GridManager : MonoBehaviour
 
         public void Clear()
         {
-            //TODO: object pooling 2
+            //TODO: could use object pooling
             type = ElementType.Empty;
             Destroy(heldElement);
         }
