@@ -17,7 +17,7 @@ public class CameraController : MonoBehaviour
 
     void Start()
     {
-        SetZoomLevel(1);
+        SetZoomLevel(5);
     }
 
     public void SetZoomLevel(float level)

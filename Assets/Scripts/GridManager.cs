@@ -131,7 +131,7 @@ public class GridManager : MonoBehaviour
 
         if(gridSize.x % 2 == 0)
         {
-            pos.x = (gridSize.x / 2) * ELEMENT_SIZE - (int)(ELEMENT_SIZE * 0.5f);
+            pos.x = -((gridSize.x / 2) * ELEMENT_SIZE - (int)(ELEMENT_SIZE * 0.5f));
         }
         else
         {
@@ -206,6 +206,11 @@ public class GridManager : MonoBehaviour
     //check where is the nearest empty place
     private Vector2Int GetNearestEmpty(Vector2Int centerLocation)
     {
+        if(ring.level > gridSize.x && ring.level > gridSize.y)
+        {
+            return new Vector2Int(-1, -1);
+        }
+
         Vector2Int locationToCheck = centerLocation + ring.posFromCenter;
 
         if (IsInbounds(locationToCheck))
@@ -227,15 +232,27 @@ public class GridManager : MonoBehaviour
             ring.NextPos();
             return GetNearestEmpty(centerLocation);
         }
-
-        //TODO: what if there is no room left for any item?
     }
 
     //sets an item to selected index in array
     public void SpawnAnItem(ElementType itemType, Vector3 spawnerPos)
     {
-        Vector2Int location = GetNearestEmpty(GetIndexPos(spawnerPos));
-        SpawnAnItemAtPos(location, itemType, spawnerPos);
+        try
+        {
+            Vector2Int location = GetNearestEmpty(GetIndexPos(spawnerPos));
+            if (location != new Vector2Int(-1, -1)) // if there is any empty space left
+            {
+                SpawnAnItemAtPos(location, itemType, spawnerPos);
+            }
+            else
+            {
+                Debug.Log("No more empty space");
+            }
+        }
+        catch
+        {
+            Debug.Log("No more empty space");
+        }
     }
 
     //sets an item to selected index in array

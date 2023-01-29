@@ -50,6 +50,6 @@ public class DragAndDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, ID
 
     public void OnDrag(PointerEventData eventData)
     {
-        rectTransform.anchoredPosition += eventData.delta * (cameraComponent.orthographicSize / 320);
+        rectTransform.anchoredPosition = cameraComponent.ScreenToWorldPoint(Input.mousePosition);
     }
 }

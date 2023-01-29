@@ -26,6 +26,7 @@ public class GridDrawer : MonoBehaviour
     //spawns all the walls
     public void DrawWalls()
     {
+        //TODO: draw walls in more optimized manner
         for (int i = 0; i < GridManager.Instance.gridSize.y; i++)
         {
             for (int j = 0; j < GridManager.Instance.gridSize.x; j++)
@@ -43,6 +44,7 @@ public class GridDrawer : MonoBehaviour
     //spawns an item
     public GameObject DrawItem(Vector2Int itemIndex, GridManager.ElementType itemType, Vector3 startPos)
     {
+        //TODO: object pooling
         Transform itemTransform = Instantiate(_itemPrefab, Vector3.zero, Quaternion.identity, _itemsParent).transform;
         Vector3 pos = new Vector3(itemIndex.x, -itemIndex.y, 0) * GridManager.ELEMENT_SIZE;
         Vector3 targetPos = GridManager.Instance.startPos + pos;
