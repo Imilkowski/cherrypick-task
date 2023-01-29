@@ -83,6 +83,13 @@ public class GridManager : MonoBehaviour
             this.type = type;
             this.heldElement = heldElement;
         }
+
+        public void Clear()
+        {
+            //TODO: object pooling 2
+            type = ElementType.Empty;
+            Destroy(heldElement);
+        }
     }
 
     public static GridManager Instance;
@@ -261,5 +268,85 @@ public class GridManager : MonoBehaviour
         GameObject newItem = gridDrawerComponent.DrawItem(itemIndex, itemType, spawnerPos);
         gridElementsArray[itemIndex.y, itemIndex.x].type = itemType;
         gridElementsArray[itemIndex.y, itemIndex.x].heldElement = newItem;
+    }
+
+    private void ClearItem(Vector2Int itemIndex)
+    {
+        gridElementsArray[itemIndex.y, itemIndex.x].Clear();
+    }
+
+    //checks an item and clear if needed
+    private bool CheckNeighbour(Vector2Int itemIndex, ElementType type)
+    {
+        if (IsInbounds(itemIndex))
+        {
+            if(ReadElement(itemIndex) == type)
+            {
+                ClearItem(itemIndex);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    //checks adjacent neighbours to the given item and clears if they're the same type
+    private bool CheckAndClearNeighbours(Vector2Int itemIndex, ElementType type)
+    {
+        bool hasNeighbours = false;
+
+        //up
+        Vector2Int upElementIndex = itemIndex - Vector2Int.up;
+        if(CheckNeighbour(upElementIndex, type))
+        {
+            hasNeighbours = true;
+        }
+
+        //right
+        Vector2Int rightElementIndex = itemIndex + Vector2Int.right;
+        if (CheckNeighbour(rightElementIndex, type))
+        {
+            hasNeighbours = true;
+        }
+
+        //bottom
+        Vector2Int bottomElementIndex = itemIndex - Vector2Int.down;
+        if (CheckNeighbour(bottomElementIndex, type))
+        {
+            hasNeighbours = true;
+        }
+
+        //left
+        Vector2Int leftElementIndex = itemIndex + Vector2Int.left;
+        if (CheckNeighbour(leftElementIndex, type))
+        {
+            hasNeighbours = true;
+        }
+
+        return hasNeighbours;
+    }
+
+    //clears all the items that has neighbours
+    public void ClearNeighbours()
+    {
+        for (int i = 0; i < gridSize.y; i++)
+        {
+            for (int j = 0; j < gridSize.x; j++)
+            {
+                ElementType elementType = ReadElement(new Vector2Int(j, i));
+
+                if(elementType == ElementType.ItemRed || elementType == ElementType.ItemGreen || elementType == ElementType.ItemBlue)
+                {
+                    bool hasNeighbours = CheckAndClearNeighbours(new Vector2Int(j, i), elementType);
+
+                    if (hasNeighbours)
+                    {
+                        ClearItem(new Vector2Int(j, i));
+                    }
+                }
+            }
+        }
+
+        ring.Reset();
     }
 }

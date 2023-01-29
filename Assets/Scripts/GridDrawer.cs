@@ -71,7 +71,8 @@ public class GridDrawer : MonoBehaviour
         }
 
         //TODO: change to not use LeanTween
-        LeanTween.moveLocal(itemTransform.gameObject, targetPos, 0.5f);
+        float distance = Vector3.Distance(startPos, targetPos);
+        LeanTween.moveLocal(itemTransform.gameObject, targetPos, distance / 500);
 
         return itemTransform.gameObject;
     }
