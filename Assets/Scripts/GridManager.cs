@@ -10,7 +10,7 @@ public class GridManager : MonoBehaviour
     public Vector3 startPos { get; private set; }
     public Vector2Int spawnerIndexPos;
 
-    private Ring ring = new Ring();
+    public Ring ring = new Ring();
 
     public enum ElementType
     {
@@ -22,7 +22,7 @@ public class GridManager : MonoBehaviour
         ItemBlue
     }
 
-    private class Ring
+    public class Ring
     {
         public int level;
         public Vector2Int posFromCenter;
@@ -215,7 +215,7 @@ public class GridManager : MonoBehaviour
     }
 
     //check where is the nearest empty place
-    private Vector2Int GetNearestEmpty(Vector2Int centerLocation)
+    public Vector2Int GetNearestEmpty(Vector2Int centerLocation)
     {
         if(ring.level > gridSize.x && ring.level > gridSize.y)
         {

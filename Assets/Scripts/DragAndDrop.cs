@@ -43,8 +43,16 @@ public class DragAndDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, ID
 
     private void SetNewSpawnerPos()
     {
-        //TODO: check in the same system as items - check if there is no wall at this index
         Vector2Int indexPos = GetIndexPos(true);
+
+        if(GridManager.Instance.gridElementsArray[indexPos.y, indexPos.x].type != GridManager.ElementType.Empty)
+        {
+            GridManager.Instance.ring.Reset();
+            indexPos = GridManager.Instance.GetNearestEmpty(indexPos);
+
+            rectTransform.localPosition = GridManager.Instance.startPos + new Vector3(indexPos.x * 32, -indexPos.y * 32, 0);
+        }
+
         GridManager.Instance.MoveSpawnerIndex(indexPos);
     }
 

@@ -22,8 +22,13 @@ public class CameraController : MonoBehaviour
 
     public void SetZoomLevel(float level)
     {
-        //TODO: how to take width into consideration?
-        mainCamera.orthographicSize = level * 320 * (GridManager.Instance.gridSize.y / 100f);
+        float sizeDependent = GridManager.Instance.gridSize.y / 100f;
+        if(GridManager.Instance.gridSize.x > GridManager.Instance.gridSize.y)
+        {
+            sizeDependent = GridManager.Instance.gridSize.x / 100f;
+        }
+
+        mainCamera.orthographicSize = level * 320 * sizeDependent;
     }
 
     public void StartPanning()
